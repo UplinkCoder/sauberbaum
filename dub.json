@@ -1,0 +1,9 @@
+{
+	"name": "sauerbaum",
+	"authors": [
+		"Stefan Koch"
+	],
+	"description": "An implementation of the sauerbaum game",
+	"copyright": "Copyright © 2016, Stefan Koch",
+	"license": "Boost"
+}
