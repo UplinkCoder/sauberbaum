@@ -19,7 +19,7 @@ static immutable sauerbaum_layoutString =
     "   x x x x   \n" ~
     "    x x x    \n" ~
     "     x x     \n" ~ 
-    "      x      ";
+    "      o      ";
 
 struct SauerBaum
 {
@@ -28,7 +28,8 @@ struct SauerBaum
 
     pragma(msg, xmax * ymax);
 
-    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(`      x       
+    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(
+`      o       
      x x     
     x x x    
    x x x x   
@@ -123,6 +124,10 @@ SauerBaum parseSauerbaum(string sauerbaum, bool reversed = false)
             {
                 sb[idx] = SauerbaumFieldType.Free;
             }
+            else if (c == 'o')
+            {
+                sb[idx] = SauerbaumFieldType.RainDrop;
+            }
             else if (c >= '1' && c <= '7')
             {
                 sb[idx] = cast(SauerbaumFieldType)(SauerbaumFieldType.Player1 + (c - '1'));
@@ -152,6 +157,18 @@ debug
     }
 
     pragma(msg, validPositionString(SauerBaum.init));
+}
+
+void addDrop(SauerBaum* sb)
+{
+    foreach_reverse (ref f; (*sb).sauerbaumGrid)
+    {
+        if (f == SauerbaumFieldType.Free)
+        {
+            f = SauerbaumFieldType.RainDrop;
+            break;
+        }
+    }
 }
 
 string drawSauerbaum(SauerBaum sb)
@@ -202,10 +219,26 @@ string drawSauerbaum(SauerBaum sb)
         }
     }
 
-    import std.algorithm : reverse;
+   import std.algorithm : reverse;
 
     reverse(result);
     return cast(string) result;
 }
 
-pragma(msg, drawSauerbaum(SauerBaum.init));
+string Rain()
+{
+    SauerBaum sb;
+    string result;
+
+
+    foreach(_; 0 .. 40)
+    {
+        result ~= "\n-----------------\n";
+        addDrop(&sb);
+        result ~= drawSauerbaum(sb);
+        result ~= "\n-----------------";
+    }
+
+    return result;
+}
+
