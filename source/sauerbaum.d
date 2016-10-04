@@ -166,7 +166,7 @@ string drawSauerbaum(SauerBaum sb)
             oldy = (i / sb.xmax);
         }
 
-        switch(f) with(SauerbaumFieldType)
+        final switch(f) with(SauerbaumFieldType)
         {
                case Invalid :
                   result ~= " ";
@@ -174,7 +174,30 @@ string drawSauerbaum(SauerBaum sb)
                case Free :
                   result ~= "x";
                break;
-               default : goto case Invalid;
+               case RainDrop :
+                  result ~= "o";
+               break;
+               case Player1 :
+                  result ~= "1";
+               break;
+               case Player2 :
+                  result ~= "2";
+               break;
+               case Player3 :
+                  result ~= "3";
+               break;
+               case Player4 :
+                  result ~= "4";
+               break;
+               case Player5 :
+                  result ~= "5";
+               break;
+               case Player6 :
+                  result ~= "6";
+               break;
+               case Player7 :
+                  result ~= "7";
+               break;
         }
     }
 
