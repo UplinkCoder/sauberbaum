@@ -69,6 +69,19 @@ x x x x x x x`)
         return index == turnaroundFieldIndex;
     }
 
+    void addDrop()
+    {
+        foreach_reverse (ref f; sauerbaumGrid)
+        {
+            if (f == SauerbaumFieldType.Free)
+            {
+                f = SauerbaumFieldType.RainDrop;
+                break;
+            }
+        }
+    }
+
+
     /*    uint[DirectionsEnum.max*3] canMoveTo(uint steps)
     {
         foreach(direction;directions)
@@ -159,18 +172,6 @@ debug
     pragma(msg, validPositionString(SauerBaum.init));
 }
 
-void addDrop(SauerBaum* sb)
-{
-    foreach_reverse (ref f; (*sb).sauerbaumGrid)
-    {
-        if (f == SauerbaumFieldType.Free)
-        {
-            f = SauerbaumFieldType.RainDrop;
-            break;
-        }
-    }
-}
-
 string drawSauerbaum(SauerBaum sb)
 {
     char[] result;
@@ -234,7 +235,7 @@ string Rain()
     foreach(_; 0 .. 40)
     {
         result ~= "\n-----------------\n";
-        addDrop(&sb);
+        sb.addDrop();
         result ~= drawSauerbaum(sb);
         result ~= "\n-----------------";
     }
