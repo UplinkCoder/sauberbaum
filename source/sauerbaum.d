@@ -7,7 +7,7 @@ w           O
       S
 */
 static immutable sauerbaum_layoutString = 
-    "x x x x x x x\n"~ 
+    "x x x x x x x\n" ~ 
     "             \n" ~ 
     "      x      \n" ~
     "             \n" ~
@@ -29,7 +29,7 @@ struct SauerBaum
     pragma(msg, xmax * ymax);
 
     SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(
-`      o       
+`      x       
      x x     
     x x x    
    x x x x   
