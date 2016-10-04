@@ -282,11 +282,57 @@ struct GameState
         return 3;
     }
 
-    void beginDraw()
+    void beginDrawMovementDice()
     {
-
     }
 
+    void endDrawMovementDice()
+    {
+        
+    }
+
+    void drawMovementDice(uint diceFace)
+    {
+    }
+
+    uint choseDice()
+    {
+        //TODO this has to be implemented!
+        return 0;
+    }
+
+    void showRainDice(uint diceFace)
+    {
+    }
+
+    Path[] calculatePaths(uint playerIndex, uint stepCount)
+    {
+        assert(playerIndex >= 0 && playerIndex <= 6);
+        return [];
+    }
+
+    uint choseDestination(Path[] destinations)
+    {
+        return 0;
+    }
+
+    void removeDrop(uint playerIndex, SauerbaumFieldType* drop)
+    {
+        assert(playerIndex >= 0 && playerIndex <= 6);
+        // TODO show animation of flying raindrop
+    }
+
+    void movePlayer(uint playerIndex, Path p)
+    {
+        assert(playerIndex >= 0 && playerIndex <= 6);
+        sb.sauerbaumGrid[sb.playerPositions[playerIndex]] = SauerbaumFieldType.Free;
+        *p.dest = cast(SauerbaumFieldType) (SauerbaumFieldType.Player1 + playerIndex);
+    }
+}
+
+struct Path
+{
+    SauerbaumFieldType* dest;
 }
 
 GameState beginGame(uint nPlayers = 7, uint nRainDrops = 40)
@@ -339,7 +385,7 @@ void Game()
                 auto destIndex = choseDestination(paths);
                 if (*(paths[destIndex].dest) == SauerbaumFieldType.RainDrop)
                 {
-                    removeDrop(paths[destIndex].dest, pi);
+                    removeDrop(pi, paths[destIndex].dest);
                 }
                 movePlayer(pi, paths[destIndex]);
                 if (diceRemaining)
