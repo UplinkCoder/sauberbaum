@@ -13,9 +13,8 @@ struct SauerBaum
     enum xmax = int(13);
     enum ymax = int(16);
 
-    pragma(msg, xmax * ymax);
-
-    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(`      x       
+    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(
+`      x       
      x x     
     x x x    
    x x x x   
@@ -33,7 +32,7 @@ x x x x x x x
 x x x x x x x`)
         .sauerbaumGrid;
     uint[8] playerPositions = [0, 2, 4, 6, 8, 10, 12];
-
+    uint players = void;
     //StartField is {0,7}
     //Players Start at [{0,0}, {0,12}]
     //Special turnaroundField is {3,7}
@@ -49,7 +48,7 @@ x x x x x x x`)
 
     enum startFieldIndex = 6;
     enum turnaroundFieldIndex = 5 * 14 + 6;
-    uint dropsRemaining = 40;
+    uint dropsRemaining = 30;
     static bool isSpecialTurnaroundField(uint index) pure
     {
         return index == turnaroundFieldIndex;
@@ -251,7 +250,57 @@ string Rain()
 
     return result;
 }
-/*
+pragma(msg, Rain());
+
+struct GameState
+{
+    SauerBaum sb;
+//    DrawState ds;
+    uint players()
+    {
+        return sb.players;
+    }
+
+    void rain(uint n)
+    {
+        while(n--) sb.addDrop();
+    }
+
+    bool won()
+    {
+        return true;
+    }
+
+    bool lost()
+    {
+        return false;
+    }
+
+    uint castDice()
+    {
+        // use reproduceable rng here
+        return 3;
+    }
+
+    void beginDraw()
+    {
+
+    }
+
+}
+
+GameState beginGame(uint nPlayers = 7, uint nRainDrops = 40)
+{
+    SauerBaum sb;
+    assert(nPlayers >= 3 && nPlayers <= 7, "Invalid number of players");
+    assert(nRainDrops >= 30 && nRainDrops <= 60, "Invalid number of Raindrops");
+    sb.players = nPlayers;
+    sb.dropsRemaining = nRainDrops;
+    sb.addDrop();
+
+    return GameState(sb);
+}
+
 void Game()
 {
     auto gameState = beginGame(7); // beginGameWith 7 players;
@@ -261,7 +310,7 @@ void Game()
 
         while (!won && !lost)
         {
-            foreach (pi; 0 .. gamState.players)
+            foreach (pi; 0 .. gameState.players)
             {
 
                 auto rainDice = castDice();
@@ -288,9 +337,9 @@ void Game()
                 diceRemaining--;
                 auto paths = calculatePaths(pi, movementDice[diceIndex]);
                 auto destIndex = choseDestination(paths);
-                if (paths[destIndex].dest == SauerbaumFieldType.RainDrop)
+                if (*(paths[destIndex].dest) == SauerbaumFieldType.RainDrop)
                 {
-                    addRainDrop(pi);
+                    removeDrop(paths[destIndex].dest, pi);
                 }
                 movePlayer(pi, paths[destIndex]);
                 if (diceRemaining)
@@ -300,4 +349,3 @@ void Game()
 
     }
 }
-*/
