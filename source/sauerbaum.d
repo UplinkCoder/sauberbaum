@@ -6,20 +6,7 @@ w           O
   SW     SO
       S
 */
-static immutable sauerbaum_layoutString = 
-    "x x x x x x x\n" ~ 
-    "             \n" ~ 
-    "      x      \n" ~
-    "             \n" ~
-    "      x      \n" ~ 
-    "x x x x x x x\n" ~ 
-    " x x x x x x \n" ~
-    "  x x x x x  \n" ~ 
-    "   x x x x   \n" ~ 
-    "   x x x x   \n" ~
-    "    x x x    \n" ~
-    "     x x     \n" ~ 
-    "      o      ";
+static immutable sauerbaum_layoutString = "x x x x x x x\n" ~ "             \n" ~ "      x      \n" ~ "             \n" ~ "      x      \n" ~ "x x x x x x x\n" ~ " x x x x x x \n" ~ "  x x x x x  \n" ~ "   x x x x   \n" ~ "   x x x x   \n" ~ "    x x x    \n" ~ "     x x     \n" ~ "      o      ";
 
 struct SauerBaum
 {
@@ -28,8 +15,7 @@ struct SauerBaum
 
     pragma(msg, xmax * ymax);
 
-    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(
-`      x       
+    SauerbaumFieldType[ymax * xmax] sauerbaumGrid = parseSauerbaum(`      x       
      x x     
     x x x    
    x x x x   
@@ -81,7 +67,6 @@ x x x x x x x`)
         }
     }
 
-
     /*    uint[DirectionsEnum.max*3] canMoveTo(uint steps)
     {
         foreach(direction;directions)
@@ -131,8 +116,8 @@ SauerBaum parseSauerbaum(string sauerbaum, bool reversed = false)
     {
         foreach (coln, char c; line)
         {
-            immutable idx = reversed ? linen * SauerBaum.xmax + coln :
-                            (SauerBaum.ymax - 1 - linen) * SauerBaum.xmax + (SauerBaum.xmax - 1 - coln);
+            immutable idx = reversed ? linen * SauerBaum.xmax + coln : (
+                SauerBaum.ymax - 1 - linen) * SauerBaum.xmax + (SauerBaum.xmax - 1 - coln);
             if (c == 'x')
             {
                 sb[idx] = SauerbaumFieldType.Free;
@@ -220,7 +205,7 @@ string drawSauerbaum(SauerBaum sb)
         }
     }
 
-   import std.algorithm : reverse;
+    import std.algorithm : reverse;
 
     reverse(result);
     return cast(string) result;
@@ -231,8 +216,7 @@ string Rain()
     SauerBaum sb;
     string result;
 
-
-    foreach(_; 0 .. 40)
+    foreach (_; 0 .. 40)
     {
         result ~= "\n-----------------\n";
         sb.addDrop();
@@ -242,4 +226,53 @@ string Rain()
 
     return result;
 }
+/*
+void Game()
+{
+    auto gameState = beginGame(7); // beginGameWith 7 players;
 
+    with (gameState)
+    {
+
+        while (!won && !lost)
+        {
+            foreach (pi; 0 .. gamState.players)
+            {
+
+                auto rainDice = castDice();
+                showRainDice(rainDice);
+                rain(rainDice);
+                uint[3] movementDice = [castDice(), castDice(), castDice()];
+                uint diceRemaining = 3;
+            LdrawMovementDice:
+                {
+                    beginDrawMovementDice;
+
+                    foreach (dice; movementDice)
+                    {
+                        if (dice != 0)
+                        {
+                            drawMovementDice(dice);
+                        }
+                    }
+
+                    endDrawMovementDice();
+                }
+
+                auto diceIndex = choseDice();
+                diceRemaining--;
+                auto paths = calculatePaths(pi, movementDice[diceIndex]);
+                auto destIndex = choseDestination(paths);
+                if (paths[destIndex].dest == SauerbaumFieldType.RainDrop)
+                {
+                    addRainDrop(pi);
+                }
+                movePlayer(pi, paths[destIndex]);
+                if (diceRemaining)
+                    goto LdrawMovementDice;
+            }
+        }
+
+    }
+}
+*/
