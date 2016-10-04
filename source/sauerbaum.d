@@ -49,7 +49,7 @@ x x x x x x x`)
 
     enum startFieldIndex = 6;
     enum turnaroundFieldIndex = 5 * 14 + 6;
-
+    uint dropsRemaining = 40;
     static bool isSpecialTurnaroundField(uint index) pure
     {
         return index == turnaroundFieldIndex;
@@ -57,12 +57,37 @@ x x x x x x x`)
 
     void addDrop()
     {
-        foreach_reverse (ref f; sauerbaumGrid)
+        if (dropsRemaining)
         {
-            if (f == SauerbaumFieldType.Free)
+            --dropsRemaining;
+            foreach_reverse (ref f; sauerbaumGrid)
             {
-                f = SauerbaumFieldType.RainDrop;
-                break;
+                if (f == SauerbaumFieldType.Free)
+                {
+                    f = SauerbaumFieldType.RainDrop;
+                    break;
+                  }
+            }
+        }
+        else
+        {
+            SauerbaumFieldType* rainField = null;
+            foreach_reverse (ref f; sauerbaumGrid)
+            {
+                if (rainField)
+                {
+                    if (f == SauerbaumFieldType.Free)
+                    {
+                        f = SauerbaumFieldType.RainDrop;
+                        *rainField = SauerbaumFieldType.Free;
+                        break;
+                    }
+                    continue;
+                }
+                else if (f == SauerbaumFieldType.RainDrop)
+                {
+                    rainField = &f;
+                }
             }
         }
     }
